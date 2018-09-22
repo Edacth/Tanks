@@ -73,7 +73,7 @@ int tanks()
 
 		if (((framesCounter / 120) % 2) == 1)
 		{
-			enemyForce[0].fire(enemyShells, shellArraySize, { enemyForce[0].rectangle.x, enemyForce[0].rectangle.y }, 0);
+			enemyForce[0].fire(enemyShells, shellArraySize, { enemyForce[0].rectangle.x + 30, enemyForce[0].rectangle.y }, 0);
 			framesCounter = 0;
 		}
 
