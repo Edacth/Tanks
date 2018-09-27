@@ -1,3 +1,4 @@
+#include <iostream>
 #include "tank.h"
 #include "Structure.h"
 #include "projectile.h"
@@ -63,4 +64,10 @@ void Tank::fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2,
 	shells[j].rectangle.y = { barrelPosition2.y }; //Move projectile to barrel
 	shells[j].angle = angle;
 	shells[j].speed = 6;
+}
+
+void Tank::takeDamage(int damage)
+{
+	health = health - damage;
+	std::cout << health << std::endl;
 }

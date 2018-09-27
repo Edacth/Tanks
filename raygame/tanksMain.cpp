@@ -18,7 +18,7 @@ int tanksMain()
 	int screenWidth = 800;
 	int screenHeight = 450;
 	InitWindow(screenWidth, screenHeight, "Tanks!");
-	SetTargetFPS(60);       // Set target frames-per-second
+	SetTargetFPS(60);  // Set target frames-per-second
 	Vector2 barrelPosition1 = {0, 0};
 	Vector2 barrelPosition2 = {0, 0};
 	Tank tank = { { (float)screenWidth / 2, (float)screenHeight / 2, 20, 20 }, 3, 2.5f, MAROON };
@@ -29,14 +29,13 @@ int tanksMain()
 	int shellArraySize = 10;
 	int buildingArraySize = 2;
 	int enemyForceSize = 1;
-	
 	Vector2 mousePos; // Mouse position
 	float slope = 0;
 	float angle = 0;
 	float rise = 0;
 	float run = 0;
 	int framesCounter = 0;
-	char slopeText[64], mouseXText[64], mouseYText[64], riseText[64], runText[64], angleText[64], tankXText[64], tankYText[64], tankHealthText;
+	char slopeText[64], mouseXText[64], mouseYText[64], riseText[64], runText[64], angleText[64], tankXText[64], tankYText[64], tankHealthText[64];
 	
 
 	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
@@ -60,9 +59,6 @@ int tanksMain()
 		run = (mousePos.x - (tank.rectangle.x + ( tank.rectangle.width / 2.0f)));
 		slope = (rise / run); //Calculate the slope
 		angle = (atan2(rise, run));
-
-		
-
 
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) //Get left mouse input
 		{
@@ -104,6 +100,7 @@ int tanksMain()
 			sprintf_s(tankYText, "%f", (tank.rectangle.y + (tank.rectangle.height / 2.0f))); //Convert to char*
 			sprintf_s(riseText, "%f", rise); //Convert to char*
 			sprintf_s(runText, "%f", run); //Convert to char*
+			sprintf_s(tankHealthText, "%f", (double)tank.health); //Convert to char*
 		}
 		//----------------------------------------------------------------------------------
 
@@ -131,6 +128,8 @@ int tanksMain()
 
 			DrawText("Angle", 10, 220, 20, DARKGRAY);
 			DrawText(angleText, 10, 240, 20, DARKGRAY);*/
+
+			DrawText(tankHealthText, 10, 10, 20, DARKGRAY);
 
 			DrawRectangleV({ tank.rectangle.x, tank.rectangle.y }, { tank.rectangle.width, tank.rectangle.height }, tank.color); //Draw tank body
 			DrawLine(tank.rectangle.x + (tank.rectangle.width / 2.0f), tank.rectangle.y + (tank.rectangle.height / 2.0f), mousePos.x, mousePos.y, BLUE);

@@ -53,6 +53,7 @@ bool Projectile::detectCollision(Tank* tanks, int tanksLength)
 			rectangle.x = 200;
 			rectangle.y = 200;
 			angle = 0;
+			tanks[i].takeDamage(1);
 			return true;
 		}
 	}
@@ -62,5 +63,15 @@ bool Projectile::detectCollision(Tank* tanks, int tanksLength)
 
 bool Projectile::detectCollision(Tank tank)
 {
+	if (CheckCollisionRecs(rectangle, tank.rectangle))
+	{
+		active = false;
+		speed = 0;
+		rectangle.x = 200;
+		rectangle.y = 200;
+		angle = 0;
+		tank.takeDamage(1);
+		return true;
+	}
 	return false;
 }
