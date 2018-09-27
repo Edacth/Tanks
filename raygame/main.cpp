@@ -11,7 +11,7 @@
 
 #include "raylib.h"
 #include "examples.h"
-#include "tanks.h"
+#include "tanksMain.h"
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
 	//storageValues();
 	//ThreeD();
 	//fps();
-	tanks();
+	tanksMain();
 
 	return 0;
 }

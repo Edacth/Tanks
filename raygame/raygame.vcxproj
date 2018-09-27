@@ -133,11 +133,17 @@
   <ItemGroup>
     <ClCompile Include="examples.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="tanks.cpp" />
+    <ClCompile Include="projectile.cpp" />
+    <ClCompile Include="structure.cpp" />
+    <ClCompile Include="tank.cpp" />
+    <ClCompile Include="tanksMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="examples.h" />
-    <ClInclude Include="tanks.h" />
+    <ClInclude Include="projectile.h" />
+    <ClInclude Include="structure.h" />
+    <ClInclude Include="tank.h" />
+    <ClInclude Include="tanksMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,12 +1,17 @@
+//This is the main file of Tanks!
 
 
-#include "raylib.h"
-#include "tanks.h"
-#include <iostream>
 #include <string>
 #include <math.h> 
+#include <iostream>
+#include "raylib.h"
+#include "tank.h"
+#include "tanksMain.h"
+#include "projectile.h"
+#include "Structure.h"
 
-int tanks()
+
+int tanksMain()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
@@ -14,7 +19,8 @@ int tanks()
 	int screenHeight = 450;
 	InitWindow(screenWidth, screenHeight, "Tanks!");
 	SetTargetFPS(60);       // Set target frames-per-second
-
+	Vector2 barrelPosition1 = {0, 0};
+	Vector2 barrelPosition2 = {0, 0};
 	Tank tank = { { (float)screenWidth / 2, (float)screenHeight / 2, 20, 20 }, 3, 2.5f, MAROON };
 	Tank enemyForce[1] = { { { 300, 300, 20, 20 }, 1, 2.5f, BLACK } };
 	Projectile shells[10];
@@ -22,8 +28,8 @@ int tanks()
 	Structure buildings[2] = { { {500, 100, 60, 30}, PURPLE },{ { 500, 500, 60, 30 }, PURPLE } };
 	int shellArraySize = 10;
 	int buildingArraySize = 2;
-	Vector2 barrelPosition1 = {0, 0};
-	Vector2 barrelPosition2 = { 0, 0 };
+	int enemyForceSize = 1;
+	
 	Vector2 mousePos; // Mouse position
 	float slope = 0;
 	float angle = 0;
@@ -33,23 +39,18 @@ int tanks()
 	char slopeText[64], mouseXText[64], mouseYText[64], riseText[64], runText[64], angleText[64], tankXText[64], tankYText[64], tankHealthText;
 	
 
-	for (int i = 0; i < shellArraySize; i++)
+	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
 	{
 		shells[i] = { {200, 200, 10, 10}, 0, 0, false, RED };
 		enemyShells[i] = { {200, 180, 10, 10}, 0, 0, false, BLUE };
 	}
-	/*for (int i = 0; i < 2; i++)
-	{
-		enemyForce[i] = { { 300, 300, 20, 20 }, 1, 2.5f, MAROON };
-	}*/
 	//--------------------------------------------------------------------------------------
 
-	
 	while (!WindowShouldClose()) // Main game loop
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		framesCounter++;
+		framesCounter++; //Counts frames
 		mousePos = GetMousePosition(); //Get mouse position
 		
 		tank.move(buildings, buildingArraySize); //Handle the tank's movement
@@ -60,29 +61,36 @@ int tanks()
 		slope = (rise / run); //Calculate the slope
 		angle = (atan2(rise, run));
 
-		barrelPosition1 = { (tank.rectangle.x + (tank.rectangle.width / 2.0f)) + 10 * cos(angle),
-			(tank.rectangle.y + (tank.rectangle.height / 2.0f)) + 10 * sin(angle) };
-		barrelPosition2 = { (tank.rectangle.x + (tank.rectangle.width / 2.0f)) + 20 * cos(angle),
-			(tank.rectangle.y + (tank.rectangle.height / 2.0f)) + 20 * sin(angle) };
+		
 
 
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) //Get left mouse input
 		{
-			tank.fire(shells, shellArraySize, barrelPosition2, angle);
+			tank.fire(shells, shellArraySize, barrelPosition2, angle); //Fire a projectile
 		}
 
-		if (((framesCounter / 120) % 2) == 1)
+		if (((framesCounter / 120) % 2) == 1) //Have the enemy fire a projectile every 2 seconds
 		{
 			enemyForce[0].fire(enemyShells, shellArraySize, { enemyForce[0].rectangle.x + 30, enemyForce[0].rectangle.y }, 0);
 			framesCounter = 0;
 		}
 
-		simulateShells(shells, shellArraySize);
-		simulateShells(enemyShells, shellArraySize);
-		for (int i = 0; i < shellArraySize; i++)
+		barrelPosition1 = { (tank.rectangle.x + (tank.rectangle.width / 2.0f)) + 10 * cos(angle),
+			(tank.rectangle.y + (tank.rectangle.height / 2.0f)) + 10 * sin(angle) };
+		barrelPosition2 = { (tank.rectangle.x + (tank.rectangle.width / 2.0f)) + 20 * cos(angle),
+			(tank.rectangle.y + (tank.rectangle.height / 2.0f)) + 20 * sin(angle) };
+
+		moveShells(shells, shellArraySize); //Traverses shells across the screen
+		moveShells(enemyShells, shellArraySize); //Traverses shells across the screen
+		
+		for (int i = 0; i < shellArraySize; i++) //Check if any of the shells are colliding with objects
 		{
-			shells[i].detectCollision(buildings, buildingArraySize, tank, enemyForce, 1);
-			enemyShells[i].detectCollision(buildings, buildingArraySize, tank, enemyForce, 1);
+			shells[i].detectCollision(buildings, buildingArraySize);
+			shells[i].detectCollision(enemyForce, enemyForceSize);
+
+
+			enemyShells[i].detectCollision(buildings, buildingArraySize);
+			enemyShells[i].detectCollision(tank);
 			
 		}
 
@@ -124,11 +132,11 @@ int tanks()
 			DrawText("Angle", 10, 220, 20, DARKGRAY);
 			DrawText(angleText, 10, 240, 20, DARKGRAY);*/
 
-
 			DrawRectangleV({ tank.rectangle.x, tank.rectangle.y }, { tank.rectangle.width, tank.rectangle.height }, tank.color); //Draw tank body
 			DrawLine(tank.rectangle.x + (tank.rectangle.width / 2.0f), tank.rectangle.y + (tank.rectangle.height / 2.0f), mousePos.x, mousePos.y, BLUE);
 			DrawPoly(barrelPosition1, 4, 10, (angle * 180 / PI) - 45, BLUE); //Draw tank barrel
 			DrawPoly(barrelPosition2, 4, 10, (angle * 180 / PI) - 45, BLUE); //Draw tank barrel
+			
 
 			DrawRectangleV({ enemyForce[0].rectangle.x, enemyForce[0].rectangle.y }, { enemyForce[0].rectangle.width, enemyForce[0].rectangle.height }, enemyForce[0].color); //Draw enemy tank
 			drawShells(shells, shellArraySize);
@@ -150,57 +158,9 @@ int tanks()
 	return 0;
 }
 
-void Projectile::forward()
-{
 
-	rectangle.x += speed * cos(angle);
-	rectangle.y += speed * sin(angle);
-}
 
-bool Projectile::detectCollision(Structure* buildings, int buildingsLength, Tank tank, Tank* enemyForce, int enemyForceLength)
-{
-	for (int i = 0; i < buildingsLength; i++)
-	{
-		if ( (CheckCollisionRecs(rectangle, buildings[i].rectangle) ) ||
-			( (rectangle.x <= 0) || (rectangle.x >= 800) || (rectangle.y <= 0) ||
-			(rectangle.y >= 450) ))
-		{
-			active = false;
-			speed = 0;
-			rectangle.x = 200;
-			rectangle.y = 200;
-			angle = 0;
-			return true;
-		}
-	}
-	for (int i = 0; i < enemyForceLength; i++)
-	{
-		if ( (CheckCollisionRecs(rectangle, enemyForce[i].rectangle) ) ||
-			( (rectangle.x <= 0) || (rectangle.x >= 800) || (rectangle.y <= 0) ||
-			(rectangle.y >= 450) ))
-		{
-			active = false;
-			speed = 0;
-			rectangle.x = 200;
-			rectangle.y = 200;
-			angle = 0;
-			return true;
-		}
-	}
-	if (CheckCollisionRecs(tank.rectangle, rectangle))
-	{
-		active = false;
-		speed = 0;
-		rectangle.x = 200;
-		rectangle.y = 200;
-		angle = 0;
-		return true;
-	}
-	
-	return false;
-}
-
-void simulateShells(Projectile* shells, int size)
+void moveShells(Projectile* shells, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -210,6 +170,7 @@ void simulateShells(Projectile* shells, int size)
 		}
 	}
 }
+
 
 void drawShells(Projectile* shells, int length)
 {
@@ -231,65 +192,12 @@ void drawBuildings(Structure* buildings, int length)
 	}
 }
 
-void Tank::move(Structure* buildings, int buildingsLength)
+/*
+void drawTanks(Tank tank)
 {
-	Vector2 newPos = {rectangle.x, rectangle.y};
-	if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) //Get arrowkey input
-	{
-		newPos.x += 2.5f;
-	}
-	if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) //Get arrowkey input
-	{
-		newPos.x -= 2.5f; 
-	}
-	if (!detectCollision(newPos, buildings, buildingsLength))
-	{
-		rectangle.x = newPos.x;
-	}
-
-	newPos = { rectangle.x, rectangle.y };
-	if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) //Get arrowkey input
-	{
-		newPos.y -= 2.5f; 
-	}
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) //Get arrowkey input
-	{
-		newPos.y += 2.5f; 
-	}
-	
-	if (!detectCollision(newPos, buildings, buildingsLength))
-	{
-		rectangle.y = newPos.y;
-	}
-	
+	DrawRectangleV({ tank.rectangle.x, tank.rectangle.y }, { tank.rectangle.width, tank.rectangle.height }, tank.color); //Draw tank body
+	DrawLine(tank.rectangle.x + (tank.rectangle.width / 2.0f), tank.rectangle.y + (tank.rectangle.height / 2.0f), mousePos.x, mousePos.y, BLUE);
+	DrawPoly(barrelPosition1, 4, 10, (angle * 180 / PI) - 45, BLUE); //Draw tank barrel
+	DrawPoly(barrelPosition2, 4, 10, (angle * 180 / PI) - 45, BLUE); //Draw tank barrel
 }
-
-bool Tank::detectCollision(Vector2 newPos, Structure* buildings, int buildingsLength)
-{
-	for (int i = 0; i < buildingsLength; i++)
-	{
-		if (CheckCollisionRecs({newPos.x, newPos.y, rectangle.width, rectangle.height}, buildings[i].rectangle))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-void Tank::fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2, float angle)
-{
-	int j = -1;
-	for (int i = 0; i < shellArraySize; i++)
-	{
-		if (shells[i].active == false)
-		{
-			j = i;
-			shells[i].active = true;
-			break;
-		}
-	}
-	shells[j].rectangle.x = { barrelPosition2.x }; //Move projectile to barrel
-	shells[j].rectangle.y = { barrelPosition2.y }; //Move projectile to barrel
-	shells[j].angle = angle;
-	shells[j].speed = 6;
-}
+*/
