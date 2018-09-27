@@ -23,7 +23,7 @@ int tanksMain()
 	Tank enemyForce[1];
 	Projectile shells[10];
 	Projectile enemyShells[10];
-	Structure buildings[2] = { { {500, 100, 60, 30}, PURPLE },{ { 500, 500, 60, 30 }, PURPLE } };
+	Structure buildings[2];
 	int shellArraySize = 10;
 	int buildingArraySize = 2;
 	int enemyForceSize = 1;
@@ -41,13 +41,17 @@ int tanksMain()
 		shells[i].instantiate(0);
 		enemyShells[i].instantiate(1);
 	}
-	tank.instantiate(0);
+	tank.instantiate(0); //Instantiate the player
 
 	for (int i = 0; i < enemyForceSize; i++) //Instantiate enemy tanks
 	{
 		enemyForce[i].instantiate(1);
 	}
+
+	buildings[0].instantiate({ 500, 100 }, { 60, 30 });
+	buildings[1].instantiate({ 500, 200 }, { 60, 30 });
 	//--------------------------------------------------------------------------------------
+
 
 	while (!WindowShouldClose()) // Main game loop
 	{
@@ -145,15 +149,20 @@ int tanksMain()
 			DrawRectangleV({ enemyForce[0].rectangle.x, enemyForce[0].rectangle.y }, { enemyForce[0].rectangle.width, enemyForce[0].rectangle.height }, enemyForce[0].color); //Draw enemy tank
 			drawShells(shells, shellArraySize);
 			drawShells(enemyShells, shellArraySize);
-			drawBuildings(buildings, 1);
+			drawBuildings(buildings, buildingArraySize);
 
 			DrawCircleV(mousePos, 5, RED); //Draw target reticule
 
 			EndDrawing();
 		}
 		//----------------------------------------------------------------------------------
+		if (tank.health <= 0)
+		{
+			break;
+		}
 	}
 
+	
 	
 	return 0;
 }
