@@ -14,8 +14,12 @@ public:
 	bool active;
 	Color color;
 
+	void instantiate(int preset);
 	void forward();
 	bool detectCollision(Structure* Structures, int StructuresLength);
 	bool detectCollision(Tank* tanks, int tanksLength);
-	bool detectCollision(Tank tank);
+	bool detectCollision(Tank* tank);
+
+protected:
+	Vector2 storagePoint;
 };

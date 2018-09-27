@@ -3,6 +3,33 @@
 #include "tank.h"
 #include "structure.h"
 
+void Projectile::instantiate(int preset)
+{
+	switch (preset)
+	{
+		//Player preset
+	case 0:
+		storagePoint = { 200, 200 };
+		rectangle = { storagePoint.x, storagePoint.y, 10, 10 };
+		angle = 0;
+		speed = 0;
+		active = false;
+		color = RED;
+		break;
+		//Enemy preset
+	case 1:
+		storagePoint = { 200, 190 };
+		rectangle = { storagePoint.x, storagePoint.y, 10, 10 };
+		angle = 0;
+		speed = 0;
+		active = false;
+		color = BLACK;
+		break;
+	default:
+		break;
+	}
+}
+
 void Projectile::forward()
 {
 
@@ -20,23 +47,12 @@ bool Projectile::detectCollision(Structure* Structures, int StructuresLength)
 		{
 			active = false;
 			speed = 0;
-			rectangle.x = 200;
-			rectangle.y = 200;
+			rectangle.x = storagePoint.x;
+			rectangle.y = storagePoint.y;
 			angle = 0;
 			return true;
 		}
 	}
-
-	/*if (CheckCollisionRecs(tank.rectangle, rectangle))
-	{
-	active = false;
-	speed = 0;
-	rectangle.x = 200;
-	rectangle.y = 200;
-	angle = 0;
-	return true;
-	}*/
-
 	return false;
 }
 
@@ -50,27 +66,27 @@ bool Projectile::detectCollision(Tank* tanks, int tanksLength)
 		{
 			active = false;
 			speed = 0;
-			rectangle.x = 200;
-			rectangle.y = 200;
+			rectangle.x = storagePoint.x;
+			rectangle.y = storagePoint.y;
 			angle = 0;
 			tanks[i].takeDamage(1);
 			return true;
 		}
 	}
-
 	return false;
 }
 
-bool Projectile::detectCollision(Tank tank)
+bool Projectile::detectCollision(Tank* tankPointer)
 {
-	if (CheckCollisionRecs(rectangle, tank.rectangle))
+	if (CheckCollisionRecs(rectangle, tankPointer->rectangle))
 	{
 		active = false;
 		speed = 0;
-		rectangle.x = 200;
-		rectangle.y = 200;
+		rectangle.x = storagePoint.x;
+		rectangle.y = storagePoint.y;
 		angle = 0;
-		tank.takeDamage(1);
+
+		tankPointer->takeDamage(1);
 		return true;
 	}
 	return false;

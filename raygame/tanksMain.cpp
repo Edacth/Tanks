@@ -15,14 +15,12 @@ int tanksMain()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 450;
-	InitWindow(screenWidth, screenHeight, "Tanks!");
-	SetTargetFPS(60);  // Set target frames-per-second
 	Vector2 barrelPosition1 = {0, 0};
 	Vector2 barrelPosition2 = {0, 0};
-	Tank tank = { { (float)screenWidth / 2, (float)screenHeight / 2, 20, 20 }, 3, 2.5f, MAROON };
-	Tank enemyForce[1] = { { { 300, 300, 20, 20 }, 1, 2.5f, BLACK } };
+	Tank tank;
+	Tank* tankPointer;
+	tankPointer = &tank;
+	Tank enemyForce[1];
 	Projectile shells[10];
 	Projectile enemyShells[10];
 	Structure buildings[2] = { { {500, 100, 60, 30}, PURPLE },{ { 500, 500, 60, 30 }, PURPLE } };
@@ -40,8 +38,14 @@ int tanksMain()
 
 	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
 	{
-		shells[i] = { {200, 200, 10, 10}, 0, 0, false, RED };
-		enemyShells[i] = { {200, 180, 10, 10}, 0, 0, false, BLUE };
+		shells[i].instantiate(0);
+		enemyShells[i].instantiate(1);
+	}
+	tank.instantiate(0);
+
+	for (int i = 0; i < enemyForceSize; i++) //Instantiate enemy tanks
+	{
+		enemyForce[i].instantiate(1);
 	}
 	//--------------------------------------------------------------------------------------
 
@@ -79,6 +83,7 @@ int tanksMain()
 		moveShells(shells, shellArraySize); //Traverses shells across the screen
 		moveShells(enemyShells, shellArraySize); //Traverses shells across the screen
 		
+		
 		for (int i = 0; i < shellArraySize; i++) //Check if any of the shells are colliding with objects
 		{
 			shells[i].detectCollision(buildings, buildingArraySize);
@@ -86,7 +91,7 @@ int tanksMain()
 
 
 			enemyShells[i].detectCollision(buildings, buildingArraySize);
-			enemyShells[i].detectCollision(tank);
+			enemyShells[i].detectCollision(&tank);
 			
 		}
 
@@ -149,14 +154,9 @@ int tanksMain()
 		//----------------------------------------------------------------------------------
 	}
 
-	// De-Initialization
-	//--------------------------------------------------------------------------------------
-	CloseWindow();        // Close window and OpenGL context
-	//--------------------------------------------------------------------------------------
-
+	
 	return 0;
 }
-
 
 
 void moveShells(Projectile* shells, int size)

@@ -8,6 +8,8 @@
 *   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
+void startScreen();
+void endScreen();
 
 #include "raylib.h"
 #include "examples.h"
@@ -15,11 +17,55 @@
 
 int main()
 {
+
+	// Initialization
+	//--------------------------------------------------------------------------------------
+	int screenWidth = 800;
+	int screenHeight = 450;
+	InitWindow(screenWidth, screenHeight, "Tanks!");
+	SetTargetFPS(60);  // Set target frames-per-second
+
 	//dropFiles();
 	//storageValues();
 	//ThreeD();
 	//fps();
+	startScreen();
 	tanksMain();
+	endScreen();
+
+
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
 
 	return 0;
+}
+
+void startScreen()
+{
+	while (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) != true)
+	{
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+		DrawText("Tanks!", GetScreenWidth() / 2, GetScreenHeight() / 2, 50, BLACK);
+
+		EndDrawing();
+	}
+	return;
+}
+
+void endScreen()
+{
+	while (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) != true)
+	{
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+		DrawText("You died.", GetScreenWidth() / 2, GetScreenHeight() / 2, 50, BLACK);
+
+		EndDrawing();
+	}
+	return;
 }

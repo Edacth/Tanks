@@ -3,6 +3,29 @@
 #include "Structure.h"
 #include "projectile.h"
 
+void Tank::instantiate(int preset)
+{
+	switch (preset)
+	{
+	//Player preset
+	case 0:
+		rectangle = { 400, 225, 20, 20 };
+		health = 3;
+		speed = 2.5f;
+		color = MAROON;
+		break;
+	//Enemy preset
+	case 1:
+		rectangle = { 300, 300, 20, 20 };
+		health = 3;
+		speed = 2.5f;
+		color = BLACK;
+		break;
+	default:
+		break;
+	}
+}
+
 void Tank::move(Structure* buildings, int buildingsLength)
 {
 	Vector2 newPos = { rectangle.x, rectangle.y };

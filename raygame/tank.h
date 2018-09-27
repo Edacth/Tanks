@@ -13,9 +13,11 @@ public:
 	float speed;
 	Color color;
 
+	void instantiate(int preset);
 	void move(Structure* buildings, int buildingsLength);
 	bool detectCollision(Vector2 newPos, Structure* buildings, int buildingsLength);
 	bool detectCollision(Projectile* shells, int shellsLength);
 	void fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2, float angle);
 	void takeDamage(int damage);
 };
+
