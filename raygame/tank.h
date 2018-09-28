@@ -12,12 +12,18 @@ public:
 	int health;
 	float speed;
 	Color color;
+	Vector2 barrelPosition1;
+	Vector2 barrelPosition2;
+	float angle;
+	bool active;
 
-	void instantiate(int preset);
+	void instantiate(Vector2 position, int preset);
 	void move(Structure* buildings, int buildingsLength);
 	bool detectCollision(Vector2 newPos, Structure* buildings, int buildingsLength);
-	bool detectCollision(Projectile* shells, int shellsLength);
-	void fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2, float angle);
+	void fire(Projectile* shells, int shellArraySize, int parentID);
 	void takeDamage(int damage);
+	void positionBarrel(Vector2 target);
+
+protected:
 };
 

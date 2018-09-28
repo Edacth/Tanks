@@ -13,6 +13,7 @@ public:
 	float speed;
 	bool active;
 	Color color;
+	int parentID;
 
 	void instantiate(int preset);
 	void forward();

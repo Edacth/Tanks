@@ -3,27 +3,35 @@
 #include "Structure.h"
 #include "projectile.h"
 
-void Tank::instantiate(int preset)
+void Tank::instantiate(Vector2 position, int preset)
 {
 	switch (preset)
 	{
 	//Player preset
 	case 0:
-		rectangle = { 400, 225, 20, 20 };
+		rectangle = { position.x, position.y, 20, 20 };
 		health = 3;
 		speed = 2.5f;
 		color = MAROON;
+		barrelPosition1 = { 0, 0 };
+		barrelPosition2 = { 0, 0 };
+		angle = 0.0f;
 		break;
 	//Enemy preset
 	case 1:
-		rectangle = { 300, 300, 20, 20 };
+		rectangle = { position.x, position.y, 20, 20 };
 		health = 3;
 		speed = 2.5f;
 		color = BLACK;
+		barrelPosition1 = { 0, 0 };
+		barrelPosition2 = { 0, 0 };
+		angle = 90.0f;
 		break;
 	default:
 		break;
 	}
+
+	active = true;
 }
 
 void Tank::move(Structure* buildings, int buildingsLength)
@@ -71,7 +79,7 @@ bool Tank::detectCollision(Vector2 newPos, Structure* buildings, int buildingsLe
 	return false;
 }
 
-void Tank::fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2, float angle)
+void Tank::fire(Projectile* shells, int shellArraySize, int pID)
 {
 	int j = -1;
 	for (int i = 0; i < shellArraySize; i++)
@@ -87,10 +95,33 @@ void Tank::fire(Projectile* shells, int shellArraySize, Vector2 barrelPosition2,
 	shells[j].rectangle.y = { barrelPosition2.y }; //Move projectile to barrel
 	shells[j].angle = angle;
 	shells[j].speed = 6;
+	shells[j].parentID = pID;
 }
 
 void Tank::takeDamage(int damage)
 {
 	health = health - damage;
 	std::cout << health << std::endl;
+	if (health <= 0)
+	{
+		active = false;
+	}
+}
+
+void Tank::positionBarrel(Vector2 target)
+{
+	float slope = 0;
+	float rise = 0;
+	float run = 0;
+
+	//Trig Calculations
+	rise = (target.y - (rectangle.y + (rectangle.height / 2.0f)));
+	run = (target.x - (rectangle.x + (rectangle.width / 2.0f)));
+	slope = (rise / run); //Calculate the slope
+	angle = (atan2(rise, run));
+
+	barrelPosition1 = { (rectangle.x + (rectangle.width / 2.0f)) + 10 * cos(angle),
+		(rectangle.y + (rectangle.height / 2.0f)) + 10 * sin(angle) };
+	barrelPosition2 = { (rectangle.x + (rectangle.width / 2.0f)) + 20 * cos(angle),
+		(rectangle.y + (rectangle.height / 2.0f)) + 20 * sin(angle) };
 }

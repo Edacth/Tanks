@@ -60,7 +60,7 @@ bool Projectile::detectCollision(Tank* tanks, int tanksLength)
 {
 	for (int i = 0; i < tanksLength; i++)
 	{
-		if ((CheckCollisionRecs(rectangle, tanks[i].rectangle)) ||
+		if ((CheckCollisionRecs(rectangle, tanks[i].rectangle) && tanks[i].active && i != parentID) ||
 			((rectangle.x <= 0) || (rectangle.x >= 800) || (rectangle.y <= 0) ||
 			(rectangle.y >= 450)))
 		{
