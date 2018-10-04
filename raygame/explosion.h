@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <string>
 
 class Tank;
 
@@ -10,7 +11,7 @@ public:
 	bool active;
 	Color color;
 	int lifespan;
-	int uuid[4];
+	std::string uuid;
 
 public:
 	void instantiate();

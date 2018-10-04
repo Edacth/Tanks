@@ -146,8 +146,7 @@ int tanksMain()
 			DrawText("Angle", 10, 220, 20, DARKGRAY);
 			DrawText(angleText, 10, 240, 20, DARKGRAY);*/
 
-			DrawText(tankHealthText, 10, 10, 20, DARKGRAY);
-
+			DrawText(("Score " + (std::to_string(tank.health))).c_str(), 10, 10, 20, DARKGRAY);
 			drawTanks(tank); //Draws the player tank
 			drawTanks(enemyForce, enemyForceSize); //Draws enemy tanks
 			

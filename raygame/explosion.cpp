@@ -4,17 +4,14 @@
 void Explosion::instantiate()
 {
 
-		storagePoint = { -200, -200 };
-		position = {storagePoint.x, storagePoint.y};
-		radius = 10;
-		active = false;
-		color = RED;
-		//char* uuid = new char[4];
-		for (int i = 0; i < 4; i++)
-		{
-			uuid[i] = '0';
-		}
-		
+	storagePoint = { -200, -200 };
+	position = { storagePoint.x, storagePoint.y };
+	radius = 10;
+	active = false;
+	color = RED;
+	//char* uuid = new char[4];
+	
+
 
 
 }
