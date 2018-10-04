@@ -29,7 +29,7 @@ int tanksMain()
 	int buildingArraySize = 2;
 	int enemyForceSize = 2;
 	Vector2 mousePos; // Mouse position
-	
+	bool isFirstTick = true;
 	int framesCounter = 0;
 	char slopeText[64], mouseXText[64], mouseYText[64], riseText[64], runText[64], angleText[64], tankXText[64], tankYText[64], tankHealthText[64];
 	
@@ -58,11 +58,12 @@ int tanksMain()
 		framesCounter++; //Counts frames
 		mousePos = GetMousePosition(); //Get mouse position
 
-		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) //Get left mouse input
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && isFirstTick == false) //Get left mouse input
 		{
 			tank.fire(shells, shellArraySize, -1); //Fire a projectile
 		}
-		
+		isFirstTick = false;
+
 		tank.move(buildings, buildingArraySize); //Handle the tank's movement
 		for (int i = 0; i < enemyForceSize; i++)
 		{
@@ -88,19 +89,21 @@ int tanksMain()
 
 		for (int i = 0; i < shellArraySize; i++) //Check if any of the shells are colliding with objects
 		{
-			shells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
-			shells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
+			
+				shells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
+				shells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
 
 
-			enemyShells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
-			enemyShells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
-			enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);
+				enemyShells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
+				enemyShells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
+				enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);
+			
 			
 		}
 
 		for (int i = 0; i < explosionsArraySize; i++)
 		{
-			explosions[i].dealDamage();
+			explosions[i].dealDamage(enemyForce, enemyForceSize);
 		}
 
 		//Convert floats to char*
@@ -114,7 +117,7 @@ int tanksMain()
 			//sprintf_s(riseText, "%f", rise); //Convert to char*
 			//sprintf_s(runText, "%f", run); //Convert to char*
 			sprintf_s(tankHealthText, "%f", tank.health); //Convert to char*
-			std::cout << tank.health << std::endl;
+			//std::cout << tank.health << std::endl;
 		}
 		//----------------------------------------------------------------------------------
 
@@ -227,12 +230,15 @@ void drawTanks(Tank* tanks, int length)
 	
 }
 
-void drawExplosions(Explosion* explosion, int length)
+void drawExplosions(Explosion* explosions, int length)
 {
 	for (int i = 0; i < length; i++)
 	{
-
-		DrawCircleV( explosion[i].position, explosion[i].radius, explosion[i].color);
+		if (explosions[i].active == true)
+		{
+			DrawCircleV(explosions[i].position, explosions[i].radius, explosions[i].color);
+		}
+		
 
 	}
 }

@@ -101,7 +101,7 @@ void Tank::fire(Projectile* shells, int shellArraySize, int pID)
 void Tank::takeDamage(int damage)
 {
 	health = health - damage;
-	std::cout << health << std::endl;
+	//std::cout << health << std::endl;
 	if (health <= 0)
 	{
 		active = false;

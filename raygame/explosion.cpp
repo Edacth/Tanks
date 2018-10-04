@@ -1,26 +1,38 @@
 #include "explosion.h"
+#include "tank.h"
 
 void Explosion::instantiate()
 {
 
-		storagePoint = { 200, 150 };
+		storagePoint = { -200, -200 };
 		position = {storagePoint.x, storagePoint.y};
 		radius = 10;
 		active = false;
 		color = RED;
+		//char* uuid = new char[4];
+		for (int i = 0; i < 4; i++)
+		{
+			uuid[i] = '0';
+		}
+		
 
 
 }
 
-void Explosion::dealDamage()
+void Explosion::dealDamage(Tank* tanks, int tanksArrayLength)
 {
 	if (active)
 	{
 		lifespan--;
 		radius--;
 	}
-
-
+	for (int i = 0; i < tanksArrayLength; i++)
+	{
+		if (CheckCollisionCircleRec(position, radius, tanks[i].rectangle))
+		{
+			
+		}
+	}
 
 
 	if (lifespan <= 0)
@@ -29,5 +41,4 @@ void Explosion::dealDamage()
 		position.y = storagePoint.y;
 		active = false;
 	}
-	//explosions[0].rectangle = { explosions[0].storagePoint.x }
 }

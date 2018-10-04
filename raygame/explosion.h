@@ -1,5 +1,7 @@
 #include "raylib.h"
 
+class Tank;
+
 class Explosion
 {
 public:
@@ -8,10 +10,11 @@ public:
 	bool active;
 	Color color;
 	int lifespan;
+	int uuid[4];
 
 public:
 	void instantiate();
-	void dealDamage();
+	void dealDamage(Tank* tanks, int tanksArrayLength);
 
 
 protected:

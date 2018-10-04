@@ -16,6 +16,7 @@ public:
 	Vector2 barrelPosition2;
 	float angle;
 	bool active;
+	int damageHistory[10][4];
 
 	void instantiate(Vector2 position, int preset);
 	void move(Structure* buildings, int buildingsLength);
