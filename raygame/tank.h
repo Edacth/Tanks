@@ -18,12 +18,13 @@ public:
 	Vector2 barrelPosition2;
 	float angle;
 	bool active;
-	std::string damageHistory[10];
+	std::string uuid;
+	
 
 	void instantiate(Vector2 position, int preset);
 	void move(Structure* buildings, int buildingsLength);
 	bool detectCollision(Vector2 newPos, Structure* buildings, int buildingsLength);
-	void fire(Projectile* shells, int shellArraySize, int parentID);
+	void fire(Projectile* shells, int shellArraySize);
 	void takeDamage(int damage);
 	void positionBarrel(Vector2 target);
 

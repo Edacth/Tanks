@@ -16,6 +16,10 @@ void Tank::instantiate(Vector2 position, int preset)
 		barrelPosition1 = { 0, 0 };
 		barrelPosition2 = { 0, 0 };
 		angle = 0.0f;
+		for (int k = 0; k < 4; k++) //Generate uuid
+		{
+			uuid = ("t" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
+		}
 		break;
 	//Enemy preset
 	case 1:
@@ -26,6 +30,10 @@ void Tank::instantiate(Vector2 position, int preset)
 		barrelPosition1 = { 0, 0 };
 		barrelPosition2 = { 0, 0 };
 		angle = 90.0f;
+		for (int k = 0; k < 4; k++) //Generate uuid
+		{
+			uuid = ("t" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
+		}
 		break;
 	default:
 		break;
@@ -79,7 +87,7 @@ bool Tank::detectCollision(Vector2 newPos, Structure* buildings, int buildingsLe
 	return false;
 }
 
-void Tank::fire(Projectile* shells, int shellArraySize, int pID)
+void Tank::fire(Projectile* shells, int shellArraySize)
 {
 	int j = -1;
 	for (int i = 0; i < shellArraySize; i++)
@@ -95,13 +103,14 @@ void Tank::fire(Projectile* shells, int shellArraySize, int pID)
 	shells[j].rectangle.y = { barrelPosition2.y }; //Move projectile to barrel
 	shells[j].angle = angle;
 	shells[j].speed = 6;
-	shells[j].parentID = pID;
+	shells[j].parentID = uuid;
 }
 
 void Tank::takeDamage(int damage)
 {
+	
 	health = health - damage;
-	//std::cout << health << std::endl;
+	std::cout << health << std::endl;
 	if (health <= 0)
 	{
 		active = false;

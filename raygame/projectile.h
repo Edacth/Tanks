@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include <string>
 
 class Tank;
 class Structure;
@@ -14,7 +15,7 @@ public:
 	float speed;
 	bool active;
 	Color color;
-	int parentID;
+	std::string parentID;
 
 	void instantiate(int preset);
 	void forward();

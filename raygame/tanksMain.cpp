@@ -31,8 +31,6 @@ int tanksMain()
 	Vector2 mousePos; // Mouse position
 	bool isFirstTick = true;
 	int framesCounter = 0;
-	char slopeText[64], mouseXText[64], mouseYText[64], riseText[64], runText[64], angleText[64], tankXText[64], tankYText[64], tankHealthText[64];
-	
 
 	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
 	{
@@ -43,7 +41,7 @@ int tanksMain()
 
 	tank.instantiate({ 400, 225 }, 0); //Instantiate the player
 	enemyForce[0].instantiate({ 300, 300 }, 1); //Instantiate enemies
-	enemyForce[1].instantiate({ 300, 200 }, 1); //Instantiate enemies
+	enemyForce[1].instantiate({ 300, 260 }, 1); //Instantiate enemies
 	
 
 	buildings[0].instantiate({ 500, 100 }, { 60, 30 });
@@ -60,7 +58,7 @@ int tanksMain()
 
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && isFirstTick == false) //Get left mouse input
 		{
-			tank.fire(shells, shellArraySize, -1); //Fire a projectile
+			tank.fire(shells, shellArraySize); //Fire a projectile
 		}
 		isFirstTick = false;
 
@@ -80,7 +78,7 @@ int tanksMain()
 			{
 				if (enemyForce[i].active)
 				{
-					enemyForce[i].fire(enemyShells, shellArraySize, i);
+					enemyForce[i].fire(enemyShells, shellArraySize);
 				}
 			}
 
@@ -106,19 +104,6 @@ int tanksMain()
 			explosions[i].dealDamage(enemyForce, enemyForceSize);
 		}
 
-		//Convert floats to char*
-		{
-			//sprintf_s(slopeText, "%f", slope); //Convert to char*
-			//sprintf_s(angleText, "%f", angle); //Convert to char*
-			//sprintf_s(mouseXText, "%f", mousePos.x); //Convert to char*
-			//sprintf_s(mouseYText, "%f", mousePos.y); //Convert to char*
-			//sprintf_s(tankXText, "%f", (tank.rectangle.x + (tank.rectangle.width / 2.0f))); //Convert to char*
-			//sprintf_s(tankYText, "%f", (tank.rectangle.y + (tank.rectangle.height / 2.0f))); //Convert to char*
-			//sprintf_s(riseText, "%f", rise); //Convert to char*
-			//sprintf_s(runText, "%f", run); //Convert to char*
-			sprintf_s(tankHealthText, "%f", tank.health); //Convert to char*
-			//std::cout << tank.health << std::endl;
-		}
 		//----------------------------------------------------------------------------------
 
 		// Draw

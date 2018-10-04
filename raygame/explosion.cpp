@@ -1,5 +1,7 @@
 #include "explosion.h"
 #include "tank.h"
+#include <iostream>
+#include <string>
 
 void Explosion::instantiate()
 {
@@ -9,9 +11,11 @@ void Explosion::instantiate()
 	radius = 10;
 	active = false;
 	color = RED;
-	//char* uuid = new char[4];
 	
-
+	for (int i = 0; i < BLACKLIST_LENGTH - 1; i++)
+	{
+		blacklist[i] = "";
+	}
 
 
 }
@@ -25,9 +29,11 @@ void Explosion::dealDamage(Tank* tanks, int tanksArrayLength)
 	}
 	for (int i = 0; i < tanksArrayLength; i++)
 	{
-		if (CheckCollisionCircleRec(position, radius, tanks[i].rectangle))
+		if (CheckCollisionCircleRec(position, radius, tanks[i].rectangle) && !checkBlacklist(tanks[i].uuid))
 		{
-			
+			tanks[i].takeDamage(1);
+			addToBlacklist(tanks[i].uuid);
+			printBlacklist();
 		}
 	}
 
@@ -37,5 +43,42 @@ void Explosion::dealDamage(Tank* tanks, int tanksArrayLength)
 		position.x = storagePoint.x;
 		position.y = storagePoint.y;
 		active = false;
+		for (int i = 0; i < BLACKLIST_LENGTH - 1; i++)
+		{
+			blacklist[i] = "";
+		}
 	}
+}
+
+void Explosion::addToBlacklist(std::string uuid)
+{
+	for (int i = BLACKLIST_LENGTH - 1; i > 0; i--)
+	{
+		blacklist[i] = blacklist[i - 1];
+
+	}
+	blacklist[0] = uuid;
+
+}
+
+bool Explosion::checkBlacklist(std::string uuid)
+{
+	for (int i = 0; i < blacklist->length(); i++)
+	{
+		if (blacklist[i] == uuid)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Explosion::printBlacklist()
+{
+	std::cout << "Blacklist:" << std::endl;
+	for (int i = 0; i < BLACKLIST_LENGTH - 1; i++)
+	{
+		std::cout << blacklist[i] << " ";
+	}
+	std::cout << std::endl;
 }
