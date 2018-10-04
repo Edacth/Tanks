@@ -9,22 +9,23 @@
 #include "tanksMain.h"
 #include "projectile.h"
 #include "Structure.h"
+#include "explosion.h"
 
 
 int tanksMain()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	Vector2 barrelPosition1 = {0, 0};
-	Vector2 barrelPosition2 = {0, 0};
 	Tank tank;
 	Tank* tankPointer;
 	tankPointer = &tank;
 	Tank enemyForce[2];
 	Projectile shells[10];
 	Projectile enemyShells[10];
+	Explosion explosions[10];
 	Structure buildings[2];
 	int shellArraySize = 10;
+	int explosionsArraySize = 10;
 	int buildingArraySize = 2;
 	int enemyForceSize = 2;
 	Vector2 mousePos; // Mouse position
@@ -37,6 +38,7 @@ int tanksMain()
 	{
 		shells[i].instantiate(0);
 		enemyShells[i].instantiate(1);
+		explosions[i].instantiate();
 	}
 
 	tank.instantiate({ 400, 225 }, 0); //Instantiate the player
@@ -86,14 +88,19 @@ int tanksMain()
 
 		for (int i = 0; i < shellArraySize; i++) //Check if any of the shells are colliding with objects
 		{
-			shells[i].detectCollision(buildings, buildingArraySize);
-			shells[i].detectCollision(enemyForce, enemyForceSize);
+			shells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
+			shells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
 
 
-			enemyShells[i].detectCollision(buildings, buildingArraySize);
-			enemyShells[i].detectCollision(enemyForce, enemyForceSize);
-			enemyShells[i].detectCollision(&tank);
+			enemyShells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
+			enemyShells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
+			enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);
 			
+		}
+
+		for (int i = 0; i < explosionsArraySize; i++)
+		{
+			explosions[i].dealDamage();
 		}
 
 		//Convert floats to char*
@@ -106,7 +113,8 @@ int tanksMain()
 			//sprintf_s(tankYText, "%f", (tank.rectangle.y + (tank.rectangle.height / 2.0f))); //Convert to char*
 			//sprintf_s(riseText, "%f", rise); //Convert to char*
 			//sprintf_s(runText, "%f", run); //Convert to char*
-			sprintf_s(tankHealthText, "%f", (double)tank.health); //Convert to char*
+			sprintf_s(tankHealthText, "%f", tank.health); //Convert to char*
+			std::cout << tank.health << std::endl;
 		}
 		//----------------------------------------------------------------------------------
 
@@ -137,15 +145,17 @@ int tanksMain()
 
 			DrawText(tankHealthText, 10, 10, 20, DARKGRAY);
 
-			drawTanks(tank);
-			drawTanks(enemyForce, enemyForceSize);
+			drawTanks(tank); //Draws the player tank
+			drawTanks(enemyForce, enemyForceSize); //Draws enemy tanks
 			
 			DrawLine(tank.rectangle.x + (tank.rectangle.width / 2.0f), tank.rectangle.y + (tank.rectangle.height / 2.0f), mousePos.x, mousePos.y, BLUE);
 
 
-			drawShells(shells, shellArraySize);
-			drawShells(enemyShells, shellArraySize);
-			drawBuildings(buildings, buildingArraySize);
+			drawShells(shells, shellArraySize); //Draw player shells
+			drawShells(enemyShells, shellArraySize); //Draw enemy shells
+			drawBuildings(buildings, buildingArraySize); //Draw buildings
+
+			drawExplosions(explosions, explosionsArraySize);
 
 			DrawCircleV(mousePos, 5, RED); //Draw target reticule
 
@@ -157,8 +167,6 @@ int tanksMain()
 			break;
 		}
 	}
-
-	
 	
 	return 0;
 }
@@ -217,4 +225,14 @@ void drawTanks(Tank* tanks, int length)
 		
 	}
 	
+}
+
+void drawExplosions(Explosion* explosion, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+
+		DrawCircleV( explosion[i].position, explosion[i].radius, explosion[i].color);
+
+	}
 }

@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="examples.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="structure.cpp" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="examples.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="structure.h" />
     <ClInclude Include="tank.h" />

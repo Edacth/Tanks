@@ -1,10 +1,20 @@
 #include "raylib.h"
 
-class explosion
+class Explosion
 {
 public:
-	Rectangle rectangle;
+	Vector2 position;
+	float radius;
 	bool active;
+	Color color;
+	int lifespan;
+
+public:
+	void instantiate();
+	void dealDamage();
 
 
+protected:
+	Vector2 storagePoint;
+	
 };
