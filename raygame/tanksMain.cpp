@@ -19,15 +19,15 @@ int tanksMain()
 	Tank tank;
 	Tank* tankPointer;
 	tankPointer = &tank;
-	Tank enemyForce[2];
+	Tank enemyForce[3];
 	Projectile shells[10];
 	Projectile enemyShells[10];
 	Explosion explosions[10];
-	Structure buildings[2];
+	Structure buildings[3];
 	int shellArraySize = 10;
 	int explosionsArraySize = 10;
-	int buildingArraySize = 2;
-	int enemyForceSize = 2;
+	int buildingArraySize = 3;
+	int enemyForceSize = 3;
 	Vector2 mousePos; // Mouse position
 	bool isFirstTick = true;
 	int framesCounter = 0;
@@ -42,10 +42,12 @@ int tanksMain()
 	tank.instantiate({ 400, 225 }, 0); //Instantiate the player
 	enemyForce[0].instantiate({ 300, 300 }, 1); //Instantiate enemies
 	enemyForce[1].instantiate({ 300, 260 }, 1); //Instantiate enemies
+	enemyForce[2].instantiate({ 100, 160 }, 1); //Instantiate enemies
 	
 
 	buildings[0].instantiate({ 500, 100 }, { 60, 30 });
 	buildings[1].instantiate({ 500, 200 }, { 60, 30 });
+	buildings[2].instantiate({ 2, 350 }, { 200, 30 });
 	//--------------------------------------------------------------------------------------
 
 
@@ -204,9 +206,10 @@ void drawTanks(Tank* tanks, int length)
 {
 	for (int i = 0; i < length; i++)
 	{
+		DrawRectangleV({ tanks[i].rectangle.x, tanks[i].rectangle.y }, { tanks[i].rectangle.width, tanks[i].rectangle.height }, tanks[i].color); //Draw tank body
+
 		if (tanks[i].active == true)
 		{
-			DrawRectangleV({ tanks[i].rectangle.x, tanks[i].rectangle.y }, { tanks[i].rectangle.width, tanks[i].rectangle.height }, tanks[i].color); //Draw tank body
 			DrawPoly(tanks[i].barrelPosition1, 4, 10, (tanks[i].angle * 180 / PI) - 45, BLUE); //Draw tank barrel
 			DrawPoly(tanks[i].barrelPosition2, 4, 10, (tanks[i].angle * 180 / PI) - 45, BLUE); //Draw tank barrel
 		}
