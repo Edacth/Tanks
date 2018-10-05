@@ -1,9 +1,10 @@
 #include "explosion.h"
 #include "tank.h"
+#include "projectile.h"
 #include <iostream>
 #include <string>
 
-void Explosion::instantiate()
+void Explosion::instantiate(Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength)
 {
 
 	storagePoint = { -200, -200 };
@@ -17,7 +18,10 @@ void Explosion::instantiate()
 		blacklist[i] = "";
 	}
 
-
+	explosionsPointer = exPointer;
+	explosionArrayLength = exArrayLength;
+	shellsPointer = shPointer;
+	shellsArrayLength = shArrayLength;
 }
 
 void Explosion::dealDamage(Tank* tanks, int tanksArrayLength, Tank* playerTank)
@@ -40,6 +44,14 @@ void Explosion::dealDamage(Tank* tanks, int tanksArrayLength, Tank* playerTank)
 	{
 		playerTank->takeDamage(1);
 		addToBlacklist(playerTank->uuid);
+	}
+	for (int i = 0; i < shellsArrayLength; i++)
+	{
+		if (CheckCollisionCircleRec(position, radius, shellsPointer[i].rectangle))
+		{
+			shellsPointer[i].triggerExplosion();
+
+		}
 	}
 
 	if (lifespan <= 0)
