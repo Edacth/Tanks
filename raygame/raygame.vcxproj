@@ -142,7 +142,6 @@
   <ItemGroup>
     <ClInclude Include="examples.h" />
     <ClInclude Include="explosion.h" />
-    <ClInclude Include="global.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="structure.h" />
     <ClInclude Include="tank.h" />

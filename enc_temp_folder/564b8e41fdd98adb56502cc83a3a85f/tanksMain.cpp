@@ -95,7 +95,7 @@ int tanksMain()
 				enemyShells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
 				enemyShells[i].detectCollision(shells, shellArraySize, explosions, explosionsArraySize);
 				enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);
-				//SHELLS AREN'T COLLIDING
+
 			
 			
 		}
