@@ -8,7 +8,7 @@
 #include <string>
 void srand(int seed);
 
-void Projectile::instantiate(int preset)
+void Projectile::instantiate(int preset, Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength)
 {
 	switch (preset)
 	{
@@ -20,6 +20,10 @@ void Projectile::instantiate(int preset)
 		speed = 0;
 		active = false;
 		color = RED;
+		explosionsPointer = exPointer;
+		explosionArrayLength = exArrayLength;
+		shellsPointer = shPointer;
+		shellsArrayLength = shArrayLength;
 		break;
 		//Enemy preset
 	case 1:
@@ -29,6 +33,10 @@ void Projectile::instantiate(int preset)
 		speed = 0;
 		active = false;
 		color = BLACK;
+		explosionsPointer = exPointer;
+		explosionArrayLength = exArrayLength;
+		shellsPointer = shPointer;
+		shellsArrayLength = shArrayLength;
 		break;
 	default:
 		break;
@@ -39,9 +47,10 @@ void Projectile::forward()
 {
 	rectangle.x += speed * cos(angle);
 	rectangle.y += speed * sin(angle);
+	
 }
 
-bool Projectile::detectCollision(Structure* Structures, int structuresLength, Explosion* explosions, int explosionArraySize)
+bool Projectile::detectCollision(Structure* Structures, int structuresLength)
 {
 	for (int i = 0; i < structuresLength; i++)
 	{
@@ -50,27 +59,7 @@ bool Projectile::detectCollision(Structure* Structures, int structuresLength, Ex
 			(rectangle.y >= 450)) ) && active)
 		{
 
-			int chosen = -1;
-			for (int j = 0; j < explosionArraySize; j++)
-			{
-				if (explosions[j].active == false)
-				{
-					chosen = j;
-					break;
-				}
-			}
-			explosions[chosen].position.x = rectangle.x;
-			explosions[chosen].position.y = rectangle.y;
-			explosions[chosen].lifespan = 60;
-			explosions[chosen].radius = 60;
-			explosions[chosen].active = true;
-			explosions[chosen].uuid = ( std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) );
-
-			active = false;
-			speed = 0;
-			rectangle.x = storagePoint.x;
-			rectangle.y = storagePoint.y;
-			angle = 0;
+			triggerExplosion();
 
 			return true;
 		}
@@ -78,7 +67,7 @@ bool Projectile::detectCollision(Structure* Structures, int structuresLength, Ex
 	return false;
 }
 
-bool Projectile::detectCollision(Tank* tanks, int tanksArraySize, Explosion* explosions, int explosionArraySize)
+bool Projectile::detectCollision(Tank* tanks, int tanksArraySize)
 {
 	for (int i = 0; i < tanksArraySize; i++)
 	{
@@ -86,28 +75,7 @@ bool Projectile::detectCollision(Tank* tanks, int tanksArraySize, Explosion* exp
 			&& tanks[i].uuid != parentID)
 		{
 
-			int chosen = -1;
-			for (int j = 0; j < explosionArraySize; j++)
-			{
-				if (explosions[j].active == false)
-				{
-					chosen = j;
-					break;
-				}
-			}
-			explosions[chosen].position.x = rectangle.x;
-			explosions[chosen].position.y = rectangle.y;
-			explosions[chosen].lifespan = 60;
-			explosions[chosen].radius = 60;
-			explosions[chosen].active = true;
-			explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
-
-
-			active = false;
-			speed = 0;
-			rectangle.x = storagePoint.x;
-			rectangle.y = storagePoint.y;
-			angle = 0;
+			triggerExplosion();
 
 			return true;
 		}
@@ -115,72 +83,57 @@ bool Projectile::detectCollision(Tank* tanks, int tanksArraySize, Explosion* exp
 	return false;
 }
 
-bool Projectile::detectCollision(Tank* tankPointer, Explosion* explosions, int explosionArraySize)
+bool Projectile::detectCollision(Tank* tankPointer)
 {
 	if (CheckCollisionRecs(rectangle, tankPointer->rectangle) && active)
 	{
 
-		int chosen = -1;
-		for (int j = 0; j < explosionArraySize; j++)
-		{
-			if (explosions[j].active == false)
-			{
-				chosen = j;
-				break;
-			}
-		}
-		explosions[chosen].position.x = rectangle.x;
-		explosions[chosen].position.y = rectangle.y;
-		explosions[chosen].lifespan = 60;
-		explosions[chosen].radius = 60;
-		explosions[chosen].active = true;
-		explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
-
-
-		active = false;
-		speed = 0;
-		rectangle.x = storagePoint.x;
-		rectangle.y = storagePoint.y;
-		angle = 0;
+		triggerExplosion();
 
 		return true;
 	}
 	return false;
 }
 
-bool Projectile::detectCollision(Projectile* projectiles, int projectileArraySize, Explosion* explosions, int explosionArraySize)
+bool Projectile::detectCollision(Projectile* projectiles, int projectileArraySize)
 {
 	for (int i = 0; i < projectileArraySize; i++)
 	{
 		if ((CheckCollisionRecs(rectangle, projectiles[i].rectangle)) 
-			&& active && uuid != projectiles[i].uuid)
+			&& active /*&& uuid != projectiles[i].uuid*/)
 		{
-
-			int chosen = -1;
-			for (int j = 0; j < explosionArraySize; j++)
-			{
-				if (explosions[j].active == false)
-				{
-					chosen = j;
-					break;
-				}
-			}
-			explosions[chosen].position.x = rectangle.x;
-			explosions[chosen].position.y = rectangle.y;
-			explosions[chosen].lifespan = 60;
-			explosions[chosen].radius = 60;
-			explosions[chosen].active = true;
-			explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
-
-
-			active = false;
-			speed = 0;
-			rectangle.x = storagePoint.x;
-			rectangle.y = storagePoint.y;
-			angle = 0;
+			triggerExplosion();
 
 			return true;
 		}
 	}
 	return false;
+}
+
+
+
+void Projectile::triggerExplosion()
+{
+	int chosen = -1;
+	for (int j = 0; j < explosionArrayLength; j++)
+	{
+		if (explosionsPointer[j].active == false)
+		{
+			chosen = j;
+			break;
+		}
+	}
+	explosionsPointer[chosen].position.x = rectangle.x;
+	explosionsPointer[chosen].position.y = rectangle.y;
+	explosionsPointer[chosen].lifespan = 60;
+	explosionsPointer[chosen].radius = 60;
+	explosionsPointer[chosen].active = true;
+	//explosionsPointer[chosen].uuid = ("e" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
+
+
+	active = false;
+	speed = 0;
+	rectangle.x = storagePoint.x;
+	rectangle.y = storagePoint.y;
+	angle = 0;
 }
