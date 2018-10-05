@@ -4,7 +4,10 @@
 #include <iostream>
 #include <string>
 
-void Explosion::instantiate(Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength)
+Explosion* explosionsPointer;
+int explosionArrayLength;
+
+void Explosion::instantiate(Explosion exPointer, int exArrayLength, Projectile shPointer, int shArrayLength)
 {
 
 	storagePoint = { -200, -200 };
@@ -18,9 +21,9 @@ void Explosion::instantiate(Explosion* exPointer, int exArrayLength, Projectile*
 		blacklist[i] = "";
 	}
 
-	explosionsPointer = exPointer;
+	explosionsPointer = &exPointer;
 	explosionArrayLength = exArrayLength;
-	shellsPointer = shPointer;
+	shellsPointer = &shPointer;
 	shellsArrayLength = shArrayLength;
 }
 

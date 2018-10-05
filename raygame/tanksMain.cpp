@@ -22,9 +22,10 @@ int tanksMain()
 	Tank enemyForce[2];
 	const int shellArraySize = 20;
 	Projectile shells[shellArraySize];
+	Projectile shellsRef = shells[0];
 	Explosion explosions[10];
+	Explosion& explosionsRef = explosions[0];
 	Structure buildings[2];
-
 	int explosionsArraySize = 10;
 	int buildingArraySize = 2;
 	int enemyForceSize = 2;
@@ -34,8 +35,12 @@ int tanksMain()
 
 	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
 	{
-		shells[i].instantiate(0, explosions, explosionsArraySize, shells, shellArraySize);
-		explosions[i].instantiate(explosions, explosionsArraySize, shells, shellArraySize);
+		shells[i].instantiate(0, explosionsRef, explosionsArraySize, shellsRef, shellArraySize);
+	}
+	
+	for (int i = 0; i < explosionsArraySize; i++) //Instantiate explosions
+	{
+		explosions[i].instantiate(explosionsRef, explosionsArraySize, shellsRef, shellArraySize);
 	}
 
 	tank.instantiate({ 400, 225 }, 0); //Instantiate the player

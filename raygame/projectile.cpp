@@ -8,7 +8,7 @@
 #include <string>
 void srand(int seed);
 
-void Projectile::instantiate(int preset, Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength)
+void Projectile::instantiate(int preset, Explosion exPointer, int exArrayLength, Projectile shPointer, int shArrayLength)
 {
 	switch (preset)
 	{
@@ -20,9 +20,9 @@ void Projectile::instantiate(int preset, Explosion* exPointer, int exArrayLength
 		speed = 0;
 		active = false;
 		color = RED;
-		explosionsPointer = exPointer;
+		explosionsPointer = &exPointer;
 		explosionArrayLength = exArrayLength;
-		shellsPointer = shPointer;
+		shellsPointer = &shPointer;
 		shellsArrayLength = shArrayLength;
 		break;
 		//Enemy preset
@@ -33,9 +33,9 @@ void Projectile::instantiate(int preset, Explosion* exPointer, int exArrayLength
 		speed = 0;
 		active = false;
 		color = BLACK;
-		explosionsPointer = exPointer;
+		explosionsPointer = &exPointer;
 		explosionArrayLength = exArrayLength;
-		shellsPointer = shPointer;
+		shellsPointer = &shPointer;
 		shellsArrayLength = shArrayLength;
 		break;
 	default:
@@ -128,7 +128,7 @@ void Projectile::triggerExplosion()
 	explosionsPointer[chosen].lifespan = 60;
 	explosionsPointer[chosen].radius = 60;
 	explosionsPointer[chosen].active = true;
-	//explosionsPointer[chosen].uuid = ("e" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
+	explosionsPointer[chosen].uuid = ("e" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
 
 
 	active = false;

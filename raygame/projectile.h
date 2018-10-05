@@ -18,7 +18,7 @@ public:
 	std::string parentID;
 	std::string uuid;
 
-	void instantiate(int preset, Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength);
+	void instantiate(int preset, Explosion exPointer, int exArrayLength, Projectile shPointer, int shArrayLength);
 	void forward();
 	bool detectCollision(Structure* Structures, int structuresLength);
 	bool detectCollision(Tank* tanks, int tanksLength);
