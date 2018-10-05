@@ -20,11 +20,11 @@ int tanksMain()
 	Tank* tankPointer;
 	tankPointer = &tank;
 	Tank enemyForce[2];
-	Projectile shells[10];
-	Projectile enemyShells[10];
+	const int shellArraySize = 20;
+	Projectile shells[shellArraySize];
 	Explosion explosions[10];
 	Structure buildings[2];
-	int shellArraySize = 10;
+
 	int explosionsArraySize = 10;
 	int buildingArraySize = 2;
 	int enemyForceSize = 2;
@@ -34,9 +34,8 @@ int tanksMain()
 
 	for (int i = 0; i < shellArraySize; i++) //Instantiate projectiles
 	{
-		shells[i].instantiate(0);
-		enemyShells[i].instantiate(1);
-		explosions[i].instantiate();
+		shells[i].instantiate(0, explosions, explosionsArraySize, shells, shellArraySize);
+		explosions[i].instantiate(explosions, explosionsArraySize, shells, shellArraySize);
 	}
 
 	tank.instantiate({ 400, 225 }, 0); //Instantiate the player
@@ -70,7 +69,6 @@ int tanksMain()
 		tank.positionBarrel(GetMousePosition()); //Handle the barrel's position
 
 		moveShells(shells, shellArraySize); //Traverses shells across the screen
-		moveShells(enemyShells, shellArraySize); //Traverses shells across the screen
 		
 		if (((framesCounter / 120) % 2) == 1) //Have the enemy fire a projectile every 2 seconds
 		{
@@ -78,7 +76,7 @@ int tanksMain()
 			{
 				if (enemyForce[i].active)
 				{
-					enemyForce[i].fire(enemyShells, shellArraySize);
+					enemyForce[i].fire(shells, shellArraySize);
 				}
 			}
 
@@ -88,13 +86,13 @@ int tanksMain()
 		for (int i = 0; i < shellArraySize; i++) //Check if any of the shells are colliding with objects
 		{
 			
-				shells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
-				shells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
+				shells[i].detectCollision(buildings, buildingArraySize);
+				shells[i].detectCollision(enemyForce, enemyForceSize);
 
-				enemyShells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
+				/*enemyShells[i].detectCollision(buildings, buildingArraySize, explosions, explosionsArraySize);
 				enemyShells[i].detectCollision(enemyForce, enemyForceSize, explosions, explosionsArraySize);
 				enemyShells[i].detectCollision(shells, shellArraySize, explosions, explosionsArraySize);
-				enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);
+				enemyShells[i].detectCollision(&tank, explosions, explosionsArraySize);*/
 				//SHELLS AREN'T COLLIDING
 			
 			
@@ -140,7 +138,6 @@ int tanksMain()
 
 
 			drawShells(shells, shellArraySize); //Draw player shells
-			drawShells(enemyShells, shellArraySize); //Draw enemy shells
 			drawBuildings(buildings, buildingArraySize); //Draw buildings
 
 			drawExplosions(explosions, explosionsArraySize);

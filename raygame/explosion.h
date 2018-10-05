@@ -2,6 +2,7 @@
 #include <string>
 
 class Tank;
+class Projectile;
 
 class Explosion
 {
@@ -15,7 +16,7 @@ public:
 	std::string blacklist[10];
 
 public:
-	void instantiate();
+	void instantiate(Explosion* exPointer, int exArrayLength, Projectile* shPointer, int shArrayLength);
 	void dealDamage(Tank* tanks, int tanksArrayLength, Tank* playerTank);
 	void addToBlacklist(std::string);
 	bool checkBlacklist(std::string);
@@ -27,5 +28,9 @@ protected:
 
 	Vector2 storagePoint;
 	
+	Explosion* explosionsPointer;
+	int explosionArrayLength;
+	Projectile* shellsPointer;
+	int shellsArrayLength;
 
 };
