@@ -20,7 +20,7 @@ void Explosion::instantiate()
 
 }
 
-void Explosion::dealDamage(Tank* tanks, int tanksArrayLength)
+void Explosion::dealDamage(Tank* tanks, int tanksArrayLength, Tank* playerTank)
 {
 	if (active)
 	{
@@ -36,7 +36,11 @@ void Explosion::dealDamage(Tank* tanks, int tanksArrayLength)
 			printBlacklist();
 		}
 	}
-
+	if (CheckCollisionCircleRec(position, radius, playerTank->rectangle) && !checkBlacklist(playerTank->uuid))
+	{
+		playerTank->takeDamage(1);
+		addToBlacklist(playerTank->uuid);
+	}
 
 	if (lifespan <= 0)
 	{

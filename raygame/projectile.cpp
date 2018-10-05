@@ -64,12 +64,8 @@ bool Projectile::detectCollision(Structure* Structures, int structuresLength, Ex
 			explosions[chosen].lifespan = 60;
 			explosions[chosen].radius = 60;
 			explosions[chosen].active = true;
-			for (int k = 0; k < 4; k++)
-			{
-				explosions[chosen].uuid = ( std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) );
-			}
+			explosions[chosen].uuid = ( std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) );
 
-			//std::cout << explosions[chosen].uuid << std::endl;
 			active = false;
 			speed = 0;
 			rectangle.x = storagePoint.x;
@@ -86,9 +82,8 @@ bool Projectile::detectCollision(Tank* tanks, int tanksArraySize, Explosion* exp
 {
 	for (int i = 0; i < tanksArraySize; i++)
 	{
-		if (((CheckCollisionRecs(rectangle, tanks[i].rectangle)) ||
-			((rectangle.x <= 0) || (rectangle.x >= 800) || (rectangle.y <= 0) ||
-			(rectangle.y >= 450))) && active && tanks[i].uuid != parentID)
+		if ((CheckCollisionRecs(rectangle, tanks[i].rectangle)) && active
+			&& tanks[i].uuid != parentID)
 		{
 
 			int chosen = -1;
@@ -105,12 +100,9 @@ bool Projectile::detectCollision(Tank* tanks, int tanksArraySize, Explosion* exp
 			explosions[chosen].lifespan = 60;
 			explosions[chosen].radius = 60;
 			explosions[chosen].active = true;
-			for (int k = 0; k < 4; k++)
-			{
-				explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
-			}
+			explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
 
-			//std::cout << explosions[chosen].uuid << std::endl;
+
 			active = false;
 			speed = 0;
 			rectangle.x = storagePoint.x;
@@ -142,12 +134,9 @@ bool Projectile::detectCollision(Tank* tankPointer, Explosion* explosions, int e
 		explosions[chosen].lifespan = 60;
 		explosions[chosen].radius = 60;
 		explosions[chosen].active = true;
-		for (int k = 0; k < 4; k++) //Generate uuid
-		{
-			explosions[chosen].uuid = ("e" + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
-		}
+		explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
 
-		//std::cout << explosions[chosen].uuid << std::endl;
+
 		active = false;
 		speed = 0;
 		rectangle.x = storagePoint.x;
@@ -155,6 +144,43 @@ bool Projectile::detectCollision(Tank* tankPointer, Explosion* explosions, int e
 		angle = 0;
 
 		return true;
+	}
+	return false;
+}
+
+bool Projectile::detectCollision(Projectile* projectiles, int projectileArraySize, Explosion* explosions, int explosionArraySize)
+{
+	for (int i = 0; i < projectileArraySize; i++)
+	{
+		if ((CheckCollisionRecs(rectangle, projectiles[i].rectangle)) 
+			&& active && uuid != projectiles[i].uuid)
+		{
+
+			int chosen = -1;
+			for (int j = 0; j < explosionArraySize; j++)
+			{
+				if (explosions[j].active == false)
+				{
+					chosen = j;
+					break;
+				}
+			}
+			explosions[chosen].position.x = rectangle.x;
+			explosions[chosen].position.y = rectangle.y;
+			explosions[chosen].lifespan = 60;
+			explosions[chosen].radius = 60;
+			explosions[chosen].active = true;
+			explosions[chosen].uuid = (std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10) + std::to_string(rand() % 10));
+
+
+			active = false;
+			speed = 0;
+			rectangle.x = storagePoint.x;
+			rectangle.y = storagePoint.y;
+			angle = 0;
+
+			return true;
+		}
 	}
 	return false;
 }

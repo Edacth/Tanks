@@ -16,7 +16,7 @@ public:
 
 public:
 	void instantiate();
-	void dealDamage(Tank* tanks, int tanksArrayLength);
+	void dealDamage(Tank* tanks, int tanksArrayLength, Tank* playerTank);
 	void addToBlacklist(std::string);
 	bool checkBlacklist(std::string);
 	void printBlacklist();
